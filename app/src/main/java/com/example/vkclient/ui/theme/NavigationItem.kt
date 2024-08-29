@@ -1,37 +1,40 @@
 package com.example.vkclient.ui.theme
 
-import android.graphics.drawable.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.MailOutline
 import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material.icons.sharp.Email
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.vkclient.R
+import com.example.vkclient.navigation.Screen
 
 sealed class NavigationItem(
+    val screen: Screen,
     val titleResId: Int,
     val icon: ImageVector
 ) {
-    object HomeItem :
+    object Home :
         NavigationItem(
+            screen = Screen.Home,
             titleResId = R.string.navigation_item_home,
             icon = Icons.Outlined.Home
         )
 
-    object FavouriteItem : NavigationItem(
+    object Favourite : NavigationItem(
+        screen = Screen.Favourite,
         titleResId = R.string.navigation_item_favourite,
         icon = Icons.Outlined.Favorite
     )
 
-    object MessageItem : NavigationItem(
+    object Message : NavigationItem(
+        screen = Screen.Messenger,
         titleResId = R.string.navigation_item_messages,
         icon = Icons.Outlined.Email
     )
 
-    object ProfileItem : NavigationItem(
+    object Profile : NavigationItem(
+        screen = Screen.Profile,
         titleResId = R.string.navigation_item_profile,
         icon = Icons.Outlined.Person
     )

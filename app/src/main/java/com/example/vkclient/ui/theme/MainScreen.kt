@@ -1,11 +1,6 @@
 package com.example.vkclient.ui.theme
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -13,43 +8,53 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import com.example.vkclient.MainViewModel
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.vkclient.navigation.AppNavGraph
+import com.example.vkclient.navigation.rememberNavigationState
 
+/**
+ * Главный экран приложения.
+ *
+ */
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Preview
 @Composable
-fun MainScreen(viewModel: MainViewModel) {
+fun MainScreen() {
+    // Основной state навигации
+    val navigationState = rememberNavigationState()
 
     Scaffold(
         bottomBar = {
             NavigationBar {
-                val selectedItemPosition = remember {
-                    mutableIntStateOf(0)
-                }
-                val items = listOf(
-                    NavigationItem.HomeItem,
-                    NavigationItem.FavouriteItem,
-                    NavigationItem.MessageItem,
-                    NavigationItem.ProfileItem
+                // State для объекта бекстек.
+                val navBackStackEntry by navigationState.navHostController.currentBackStackEntryAsState()
+
+                // Элементы навигации.
+                val itemsNavigation = listOf(
+                    NavigationItem.Home,
+                    NavigationItem.Favourite,
+                    NavigationItem.Message,
+                    NavigationItem.Profile
                 )
 
                 //region Создание панели навигации на основании переданных элементов навигации.
-                items.forEachIndexed { index, navigationItem ->
+                itemsNavigation.forEach { navigationItem ->
+
+                    val selected = navBackStackEntry?.destination?.hierarchy?.any {
+                        it.route == navigationItem.screen.route
+                    } ?: false
+
                     NavigationBarItem(
-                        selected = selectedItemPosition.intValue == index,
+                        selected = selected,
                         onClick = {
-                            selectedItemPosition.intValue = index
+                            navigationState.navigateTo(navigationItem.screen.route)
                         },
                         icon = {
                             Icon(imageVector = navigationItem.icon, contentDescription = null)
@@ -65,51 +70,28 @@ fun MainScreen(viewModel: MainViewModel) {
                 }
                 //endregion
             }
-        }) {
-        // State для новостного поста.
-        val feedPosts = viewModel.feedPosts.observeAsState(listOf())
+        }) { paddingValues ->
 
-        LazyColumn(
-            Modifier.padding(it),
-            contentPadding = PaddingValues(
-                top = 16.dp,
-                start = 8.dp,
-                end = 8.dp,
-                bottom = 148.dp
-            ),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(
-                items = feedPosts.value,
-                key = { it.id }
-            ) { feedPost ->
-                val dismissState = rememberSwipeToDismissBoxState()
-                if (dismissState.progress < 1f && dismissState.progress > 0.7) {
-                    viewModel.remove(feedPost)
-                }
-                SwipeToDismissBox(
-                    modifier = Modifier.animateItemPlacement(),
-                    state = dismissState,
-                    backgroundContent = {}
-                ) {
-                    // Карточка поста в VK.
-                    PostCard(
-                        feedPost = feedPost,
-                        onViewsClickListener = { statisticItem ->
-                            viewModel.updateCount(feedPost, statisticItem)
-                        },
-                        onLikeClickListener = { statisticItem ->
-                            viewModel.updateCount(feedPost, statisticItem)
-                        },
-                        onShareClickListener = { statisticItem ->
-                            viewModel.updateCount(feedPost, statisticItem)
-                        },
-                        onCommentClickListener = { statisticItem ->
-                            viewModel.updateCount(feedPost, statisticItem)
-                        },
-                    )
-                }
-            }
-        }
+        //region Навигационный граф.
+        AppNavGraph(
+            navHostController = navigationState.navHostController,
+            feedScreenContent = {
+                HomeScreen(
+                    paddingValues = paddingValues,
+                    onCommentClickListener = {
+                        navigationState.navigateToComments(it)
+                    }
+                )
+            },
+            commentsScreenContent = { feedPost ->
+                CommentsScreen(feedPost = feedPost, onBackPressed = {
+                    navigationState.navHostController.popBackStack()
+                })
+            },
+            // TODO: доработать экраны.
+            favouriteScreenContent = { Text(text = "FavouriteItem", color = Color.Black) },
+            messengerScreenContent = { Text(text = "MessageItem", color = Color.Black) },
+            profileScreenContent = { Text(text = "ProfileItem", color = Color.Black) })
+        //endregion
     }
 }
