@@ -7,6 +7,7 @@ pluginManagement {
                 includeGroupByRegex("androidx.*")
             }
         }
+        maven("https://artifactory-external.vkpartner.ru/artifactory/vkid-sdk-android/")
         mavenCentral()
         gradlePluginPortal()
     }
@@ -16,6 +17,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven("https://artifactory-external.vkpartner.ru/artifactory/vkid-sdk-android/")
     }
 }
 

@@ -11,6 +11,9 @@ composeBom = "2024.08.00"
 runtimeLivedata = "1.6.8"
 navigationCompose = "2.7.7"
 gson = "2.10.1"
+vkSdk = "2.2.0"
+vkSdkCore = "4.1.0"
+desugarJdkLibs = "2.1.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -29,9 +32,16 @@ androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "runtimeLivedata" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
-gson = {group = "com.google.code.gson", name = "gson", version.ref = "gson"}
+gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
+vk-android-sdk-core = { group = "com.vk", name = "android-sdk-core", version.ref = "vkSdkCore" }
+vk-android-sdk-api = { group = "com.vk", name = "android-sdk-api", version.ref = "vkSdkCore" }
+vk-id = { group = "com.vk.id", name = "vkid", version.ref = "vkSdk"}
+vk-id-one-tap-compose = { group = "com.vk.id", name = "onetap-compose", version.ref = "vkSdk" }
+desugar-jdk-libs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugarJdkLibs" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
+
 

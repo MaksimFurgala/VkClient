@@ -1,6 +1,11 @@
 package com.example.vkclient.domain
 
+import android.os.Bundle
+import android.os.Parcelable
+import androidx.navigation.NavType
 import com.example.vkclient.R
+import com.google.gson.Gson
+import kotlinx.parcelize.Parcelize
 
 /**
  * Новостной пост (новости сообществ, друзей и т.д.)
@@ -14,6 +19,7 @@ import com.example.vkclient.R
  * @property statistics - элементы статистик (просмотры, share, комментарии и лайки)
  * @constructor Create empty Feed post
  */
+@Parcelize
 data class FeedPost(
     val id: Int = 0,
     val groupName: String = "Android Broadcast",
@@ -27,4 +33,22 @@ data class FeedPost(
         StatisticPostItem(StatisticType.COMMENTS, 2),
         StatisticPostItem(StatisticType.LIKES, 1)
     )
-)
+) : Parcelable {
+    companion object {
+        val NavigationType: NavType<FeedPost> =
+            object : NavType<FeedPost>(false) {
+                override fun get(bundle: Bundle, key: String): FeedPost? {
+                    return bundle.getParcelable(key)
+                }
+
+                override fun parseValue(value: String): FeedPost {
+                    return Gson().fromJson(value, FeedPost::class.java)
+                }
+
+                override fun put(bundle: Bundle, key: String, value: FeedPost) {
+                    bundle.putParcelable(key, value)
+                }
+
+            }
+    }
+}

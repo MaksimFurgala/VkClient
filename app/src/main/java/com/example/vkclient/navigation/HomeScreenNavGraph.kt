@@ -2,12 +2,10 @@ package com.example.vkclient.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
 import com.example.vkclient.domain.FeedPost
-import com.google.gson.Gson
 
 /**
  * Вложенный граф для вкладки "Главная".
@@ -34,12 +32,13 @@ fun NavGraphBuilder.homeScreenNavGraph(
         composable(
             route = Screen.Comments.route,
             arguments = listOf(navArgument(Screen.KEY_FEED_POST) {
-                type = NavType.StringType
+                type = FeedPost.NavigationType
             })
         ) {
             // Получаем из бекстека аргумент с постом в виде json и парсим в объект FeedPost.
-            val feedPostJson = it.arguments?.getString(Screen.KEY_FEED_POST) ?: ""
-            val feedPost = Gson().fromJson<FeedPost>(feedPostJson, FeedPost::class.java)
+            val feedPost = it.arguments?.getParcelable<FeedPost>(Screen.KEY_FEED_POST)
+                ?: throw RuntimeException("Args is null")
+
             commentsScreenContent(feedPost)
         }
     }
