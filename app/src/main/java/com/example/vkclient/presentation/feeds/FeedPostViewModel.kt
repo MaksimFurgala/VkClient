@@ -1,32 +1,48 @@
-package com.example.vkclient
+package com.example.vkclient.presentation.feeds
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.vkclient.data.repository.FeedPostRepository
 import com.example.vkclient.domain.FeedPost
 import com.example.vkclient.domain.StatisticPostItem
-import com.example.vkclient.ui.theme.FeedPostScreenState
+import kotlinx.coroutines.launch
 
 /**
  * View model для постов.
  *
  * @constructor Create empty Feed post view model
  */
-class FeedPostViewModel : ViewModel() {
-
-    // Список постов TODO сделать получение даннных из сети.
-    private val sourceList = mutableListOf<FeedPost>().apply {
-        repeat(13) {
-            add(FeedPost(id = it))
-        }
-    }
+class FeedPostViewModel(application: Application) : AndroidViewModel(application) {
 
     // Начаьный state для постов.
-    private val initialState = FeedPostScreenState.Posts(posts = sourceList)
+    private val initialState = FeedPostScreenState.Initial
+
+    private val feedPostRepository = FeedPostRepository(application)
+
+    init {
+        loadFeedPosts()
+    }
 
     // State для поста
     private val _screenState = MutableLiveData<FeedPostScreenState>(initialState)
     val screenState: LiveData<FeedPostScreenState> = _screenState
+
+    private fun loadFeedPosts() {
+        viewModelScope.launch {
+            val feedPosts = feedPostRepository.loadFeedPosts()
+            _screenState.value = FeedPostScreenState.Posts(posts = feedPosts)
+        }
+    }
+
+    fun changeLikeStatus(feedPost: FeedPost) {
+        viewModelScope.launch {
+            feedPostRepository.changeLikeStatus(feedPost)
+            _screenState.value = FeedPostScreenState.Posts(posts = feedPostRepository.feedPosts)
+        }
+    }
 
     /**
      * Изменение значений для элемента статистика поста.

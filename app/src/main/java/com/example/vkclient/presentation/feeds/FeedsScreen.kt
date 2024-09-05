@@ -1,4 +1,4 @@
-package com.example.vkclient.ui.theme
+package com.example.vkclient.presentation.feeds
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
@@ -14,14 +14,13 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.vkclient.FeedPostViewModel
 import com.example.vkclient.domain.FeedPost
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun HomeScreen(
+fun FeedsScreen(
     paddingValues: PaddingValues,
-    onCommentClickListener: (FeedPost) -> Unit
+    onCommentClickListener: (FeedPost) -> Unit,
 ) {
     val viewModel: FeedPostViewModel = viewModel()
     // State для новостного поста.
@@ -50,7 +49,7 @@ private fun FeedPosts(
     viewModel: FeedPostViewModel,
     paddingValues: PaddingValues,
     posts: List<FeedPost>,
-    onCommentClickListener: (FeedPost) -> Unit
+    onCommentClickListener: (FeedPost) -> Unit,
 ) {
     LazyColumn(
         Modifier.padding(paddingValues),
@@ -81,14 +80,14 @@ private fun FeedPosts(
                     onViewsClickListener = { statisticItem ->
                         viewModel.updateCount(feedPost, statisticItem)
                     },
-                    onLikeClickListener = { statisticItem ->
-                        viewModel.updateCount(feedPost, statisticItem)
-                    },
                     onShareClickListener = { statisticItem ->
                         viewModel.updateCount(feedPost, statisticItem)
                     },
                     onCommentClickListener = {
                         onCommentClickListener(feedPost)
+                    },
+                    onLikeClickListener = {
+                        viewModel.changeLikeStatus(feedPost)
                     },
                 )
             }

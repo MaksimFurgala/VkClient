@@ -1,4 +1,4 @@
-package com.example.vkclient.ui.theme
+package com.example.vkclient.presentation.feeds
 
 import com.example.vkclient.domain.FeedPost
 

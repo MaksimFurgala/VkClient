@@ -1,4 +1,4 @@
-package com.example.vkclient.ui.theme
+package com.example.vkclient.presentation.main
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -18,6 +18,8 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.vkclient.navigation.AppNavGraph
 import com.example.vkclient.navigation.rememberNavigationState
+import com.example.vkclient.presentation.comments.CommentsScreen
+import com.example.vkclient.presentation.feeds.FeedsScreen
 
 /**
  * Главный экран приложения.
@@ -76,7 +78,7 @@ fun MainScreen() {
         AppNavGraph(
             navHostController = navigationState.navHostController,
             feedScreenContent = {
-                HomeScreen(
+                FeedsScreen(
                     paddingValues = paddingValues,
                     onCommentClickListener = {
                         navigationState.navigateToComments(it)

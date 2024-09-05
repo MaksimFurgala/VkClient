@@ -1,4 +1,4 @@
-package com.example.vkclient.ui.theme
+package com.example.vkclient.presentation.comments
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -28,10 +28,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.vkclient.CommentsViewModel
-import com.example.vkclient.CommentsViewModelFactory
 import com.example.vkclient.domain.Comment
 import com.example.vkclient.domain.FeedPost
+import com.example.vkclient.ui.theme.VkClientTheme
 
 /**
  * Экран со списком комментариев.
