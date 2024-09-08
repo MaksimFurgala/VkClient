@@ -36,8 +36,6 @@ fun PostCard(
     modifier: Modifier = Modifier,
     feedPost: FeedPost,
     onLikeClickListener: (StatisticPostItem) -> Unit,
-    onShareClickListener: (StatisticPostItem) -> Unit,
-    onViewsClickListener: (StatisticPostItem) -> Unit,
     onCommentClickListener: (StatisticPostItem) -> Unit,
 ) {
     Card(modifier = modifier) {
@@ -58,8 +56,6 @@ fun PostCard(
         BottomBarPostCard(
             statistics = feedPost.statistics,
             onLikeClickListener = onLikeClickListener,
-            onShareClickListener = onShareClickListener,
-            onViewsClickListener = onViewsClickListener,
             onCommentClickListener = onCommentClickListener,
             isFavourite = feedPost.isLiked
         )
@@ -104,8 +100,6 @@ private fun HeaderPostCard(
 private fun BottomBarPostCard(
     statistics: List<StatisticPostItem>,
     onLikeClickListener: (StatisticPostItem) -> Unit,
-    onShareClickListener: (StatisticPostItem) -> Unit,
-    onViewsClickListener: (StatisticPostItem) -> Unit,
     onCommentClickListener: (StatisticPostItem) -> Unit,
     isFavourite: Boolean
 ) {
@@ -118,10 +112,7 @@ private fun BottomBarPostCard(
             val viewsItem = statistics.getItemByType(StatisticType.VIEWS)
             IconWithText(
                 iconResId = R.drawable.ic_views_count,
-                text = formatStatisticPostItemCount(viewsItem.count),
-                onItemClickListener = {
-                    onViewsClickListener(viewsItem)
-                }
+                text = formatStatisticPostItemCount(viewsItem.count)
             )
         }
         Row(
@@ -133,10 +124,7 @@ private fun BottomBarPostCard(
             val sharesItem = statistics.getItemByType(StatisticType.SHARES)
             IconWithText(
                 iconResId = R.drawable.ic_share,
-                text = formatStatisticPostItemCount(sharesItem.count),
-                onItemClickListener = {
-                    onShareClickListener(sharesItem)
-                }
+                text = formatStatisticPostItemCount(sharesItem.count)
             )
             val commentsItem = statistics.getItemByType(StatisticType.COMMENTS)
             IconWithText(
@@ -177,15 +165,21 @@ private fun formatStatisticPostItemCount(count: Int): String {
 private fun IconWithText(
     iconResId: Int,
     text: String,
-    onItemClickListener: () -> Unit,
+    onItemClickListener: (() -> Unit)? = null,
     tint: Color = MaterialTheme.colorScheme.onSecondary
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.clickable {
+    val modifier = if (onItemClickListener == null) {
+        Modifier
+    } else {
+        Modifier.clickable {
             onItemClickListener()
         }
-    ) {
+    }
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+
+        ) {
         Icon(
             modifier = Modifier.size(20.dp),
             painter = painterResource(id = iconResId),

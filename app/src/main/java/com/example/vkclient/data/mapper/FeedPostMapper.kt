@@ -1,7 +1,9 @@
 package com.example.vkclient.data.mapper
 
 import com.example.vkclient.commons.DateConverters
+import com.example.vkclient.data.model.CommentsResponseDataModel
 import com.example.vkclient.data.model.FeedResponseDataModel
+import com.example.vkclient.domain.Comment
 import com.example.vkclient.domain.FeedPost
 import com.example.vkclient.domain.StatisticPostItem
 import com.example.vkclient.domain.StatisticType
@@ -35,7 +37,7 @@ class FeedPostMapper {
                 id = post.id,
                 communityId = post.communityId,
                 communityName = group.name,
-                publicDate = DateConverters.timestampToStringDate(post.date * MILLISECONDS_PER_SECOND),
+                publicDate = DateConverters.timestampToStringDate(post.date),
                 communityImageUrl = group.photoUrl,
                 contentText = post.text,
                 contentImageUrl = post.attachments.firstOrNull()?.photo?.photoCollection?.lastOrNull()?.url,
@@ -52,11 +54,23 @@ class FeedPostMapper {
         return result
     }
 
-    companion object {
+    fun mapResponseToComments(response: CommentsResponseDataModel): List<Comment> {
+        val result = mutableListOf<Comment>()
+        val comments = response.content.comments
+        val profiles = response.content.profiles
 
-        /**
-         * Milliseconds Per Second
-         */
-        private const val MILLISECONDS_PER_SECOND = 1000
+        comments.forEach eachComment@{ comment ->
+            if (comment.text.isBlank()) return@eachComment //TODO: реализовать наполнение карточки комментария, если контент содержит только медиа (картинки, видео, гифки и т.д.)
+            val author = profiles.firstOrNull { it.id == comment.authorId } ?: return@eachComment
+            val postComment = Comment(
+                id = comment.id,
+                authorName = "${author.firstName} ${author.lastName}",
+                authorAvatarUrl = author.avatarUrl,
+                content = comment.text,
+                publicDate = DateConverters.timestampToStringDate(comment.date)
+            )
+            result.add(postComment)
+        }
+        return result
     }
 }

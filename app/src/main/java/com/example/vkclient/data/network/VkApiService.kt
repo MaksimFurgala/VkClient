@@ -1,5 +1,6 @@
 package com.example.vkclient.data.network
 
+import com.example.vkclient.data.model.CommentsResponseDataModel
 import com.example.vkclient.data.model.FeedResponseDataModel
 import com.example.vkclient.data.model.LikesCountResponseDataModel
 import retrofit2.http.GET
@@ -18,8 +19,28 @@ interface VkApiService {
      * @param accessToken - accessToken
      * @return - новостные посты
      */
-    @GET("newsfeed.get?v=5.199")
-    suspend fun loadPosts(@Query("access_token") accessToken: String): FeedResponseDataModel
+    @GET("newsfeed.getRecommended?v=5.199")
+    suspend fun loadFeedPosts(@Query("access_token") accessToken: String): FeedResponseDataModel
+
+    @GET("newsfeed.getRecommended?v=5.199")
+    suspend fun loadFeedPosts(
+        @Query("access_token") accessToken: String,
+        @Query("start_from") startFrom: String
+    ): FeedResponseDataModel
+
+    @GET("newsfeed.ignoreItem?v=5.199&type=post")
+    suspend fun ignoreFeedPost(
+        @Query("access_token") accessToken: String,
+        @Query("owner_id") ownerId: Long,
+        @Query("item_id") postId: Long,
+    )
+
+    @GET("wall.getComments?v=5.199&extended=1&fields=photo_100")
+    suspend fun getComments(
+        @Query("access_token") accessToken: String,
+        @Query("owner_id") ownerId: Long,
+        @Query("post_id") postId: Long
+    ): CommentsResponseDataModel
 
     /**
      * Добавление лайков.
@@ -29,7 +50,7 @@ interface VkApiService {
      * @param postId - id поста
      * @return - лайки
      */
-    @GET("likes.add?v=5.199&type=post")
+    @GET("likes.add?v=5.199&type=wall")
     suspend fun addLike(
         @Query("access_token") accessToken: String,
         @Query("owner_id") ownerId: Long,

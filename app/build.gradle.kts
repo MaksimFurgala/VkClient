@@ -30,6 +30,8 @@ android {
             useSupportLibrary = true
         }
 
+        resValue("integer", "com_vk_sdk_AppId", vkid)
+
         addManifestPlaceholders(
             mapOf(
                 "VKIDClientID" to vkid, // ID вашего приложения (app_id).

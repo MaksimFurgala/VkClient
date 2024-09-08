@@ -5,5 +5,12 @@ import com.example.vkclient.domain.FeedPost
 sealed class FeedPostScreenState {
 
     object Initial : FeedPostScreenState()
-    data class Posts(val posts: List<FeedPost>) : FeedPostScreenState()
+
+    object Loading : FeedPostScreenState()
+
+    data class Posts(
+        val posts: List<FeedPost>,
+        val nextFeedPostsIsLoading: Boolean = false
+    ) :
+        FeedPostScreenState()
 }

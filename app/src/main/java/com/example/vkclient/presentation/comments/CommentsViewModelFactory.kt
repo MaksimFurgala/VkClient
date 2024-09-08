@@ -1,5 +1,6 @@
 package com.example.vkclient.presentation.comments
 
+import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.vkclient.domain.FeedPost
@@ -11,9 +12,10 @@ import com.example.vkclient.domain.FeedPost
  * @constructor Create empty Comments view model factory
  */
 class CommentsViewModelFactory(
-    val feedPost: FeedPost
+    private val feedPost: FeedPost,
+    private val application: Application
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return CommentsViewModel(feedPost) as T
+        return CommentsViewModel(feedPost, application) as T
     }
 }

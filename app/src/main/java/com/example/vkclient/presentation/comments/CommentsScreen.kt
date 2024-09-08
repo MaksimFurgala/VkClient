@@ -1,6 +1,7 @@
 package com.example.vkclient.presentation.comments
 
-import androidx.compose.foundation.Image
+import android.app.Application
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -23,14 +24,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
 import com.example.vkclient.domain.Comment
 import com.example.vkclient.domain.FeedPost
-import com.example.vkclient.ui.theme.VkClientTheme
 
 /**
  * Экран со списком комментариев.
@@ -46,7 +46,13 @@ fun CommentsScreen(
     onBackPressed: () -> Unit,
 ) {
     // ViewModel для комментариев.
-    val viewModel: CommentsViewModel = viewModel(factory = CommentsViewModelFactory(feedPost))
+    val viewModel: CommentsViewModel = viewModel(
+        factory = CommentsViewModelFactory(
+            feedPost,
+            LocalContext.current.applicationContext as Application
+        )
+    )
+
     // State для экрана комментариев.
     val screenState = viewModel.screenState.observeAsState(CommentsScreenState.Initial)
     // Текущий state.
@@ -68,7 +74,8 @@ fun CommentsScreen(
                     start = 8.dp,
                     end = 8.dp,
                     bottom = 64.dp
-                )
+                ),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 items(items = currentState.comments, { it.id }) { comment ->
                     CommentItem(comment = comment)
@@ -91,9 +98,11 @@ private fun CommentItem(comment: Comment) {
             .padding(horizontal = 16.dp, vertical = 4.dp)
     ) {
         // Аватарка автора комментария.
-        Image(
-            modifier = Modifier.size(24.dp).clip(CircleShape),
-            painter = painterResource(id = comment.authorAvatarId),
+        AsyncImage(
+            modifier = Modifier
+                .size(48.dp)
+                .clip(CircleShape),
+            model = comment.authorAvatarUrl,
             contentDescription = null
         )
 
@@ -101,7 +110,7 @@ private fun CommentItem(comment: Comment) {
         Column(modifier = Modifier.padding(horizontal = 8.dp)) {
             // Имя комментатора.
             Text(
-                text = "${comment.authorName} CommentId: ${comment.id}",
+                text = "${comment.authorName}",
                 color = MaterialTheme.colorScheme.onPrimary,
                 fontSize = 12.sp
             )
@@ -120,29 +129,5 @@ private fun CommentItem(comment: Comment) {
                 fontSize = 12.sp
             )
         }
-    }
-}
-
-/**
- * Превью для комментария (DarkTheme).
- *
- */
-@Preview
-@Composable
-private fun PreviewCommentDark() {
-    VkClientTheme(dynamicColor = false, darkTheme = true) {
-        CommentItem(comment = Comment(id = 1))
-    }
-}
-
-/**
- * Превью для комментария (LightTheme).
- *
- */
-@Preview
-@Composable
-private fun PreviewCommentLight() {
-    VkClientTheme(dynamicColor = false, darkTheme = false) {
-        CommentItem(comment = Comment(id = 1))
     }
 }

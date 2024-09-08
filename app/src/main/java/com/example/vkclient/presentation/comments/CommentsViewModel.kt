@@ -1,10 +1,14 @@
 package com.example.vkclient.presentation.comments
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.vkclient.data.repository.FeedPostRepository
 import com.example.vkclient.domain.Comment
 import com.example.vkclient.domain.FeedPost
+import kotlinx.coroutines.launch
 
 /**
  * View model для комментариев.
@@ -14,8 +18,11 @@ import com.example.vkclient.domain.FeedPost
  * @param feedPost - новостной пост
  */
 class CommentsViewModel(
-    feedPost: FeedPost
-) : ViewModel() {
+    feedPost: FeedPost,
+    application: Application
+) : AndroidViewModel(application) {
+
+    private val repository = FeedPostRepository(application)
 
     private val _screenState = MutableLiveData<CommentsScreenState>(CommentsScreenState.Initial)
     val screenState: LiveData<CommentsScreenState> = _screenState
@@ -31,14 +38,12 @@ class CommentsViewModel(
      * @param feedPost - новостной пост
      */
     private fun loadComments(feedPost: FeedPost) {
-        val comments = mutableListOf<Comment>().apply {
-            repeat(10) {
-                add(Comment(id = it))
-            }
+        viewModelScope.launch {
+            val comments = repository.getComments(feedPost)
+            _screenState.value = CommentsScreenState.Comments(
+                feedPost = feedPost,
+                comments = comments
+            )
         }
-        _screenState.value = CommentsScreenState.Comments(
-            feedPost = feedPost,
-            comments = comments
-        )
     }
 }

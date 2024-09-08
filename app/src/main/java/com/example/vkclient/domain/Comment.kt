@@ -13,9 +13,9 @@ import com.example.vkclient.R
  * @constructor Create empty Comment
  */
 data class Comment(
-    val id: Int,
-    val authorName: String = "John Devid Washington",
-    val authorAvatarId: Int = R.drawable.icon_post,
-    val content: String = "Loren ipsum dollar then ...",
-    val publicDate: String = "12:00"
+    val id: Long,
+    val authorName: String,
+    val authorAvatarUrl: String,
+    val content: String,
+    val publicDate: String
 )

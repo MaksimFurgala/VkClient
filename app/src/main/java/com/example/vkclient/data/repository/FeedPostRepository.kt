@@ -3,6 +3,7 @@ package com.example.vkclient.data.repository
 import android.app.Application
 import com.example.vkclient.data.mapper.FeedPostMapper
 import com.example.vkclient.data.network.VkApiFactory
+import com.example.vkclient.domain.Comment
 import com.example.vkclient.domain.FeedPost
 import com.example.vkclient.domain.StatisticPostItem
 import com.example.vkclient.domain.StatisticType
@@ -38,16 +39,28 @@ class FeedPostRepository(application: Application) {
     val feedPosts: List<FeedPost>
         get() = _feedPosts.toList()
 
+    private var nextFromFeedPost: String? = null
+
     /**
      * Загрузка новостных постов.
      *
      * @return - список новостных постов
      */
     suspend fun loadFeedPosts(): List<FeedPost> {
-        val response = vkApiService.loadPosts(getAccessToken())
+        val startFrom = nextFromFeedPost
+
+        if (startFrom == null && feedPosts.isNotEmpty()) return feedPosts
+
+        val response = if (startFrom == null) {
+            vkApiService.loadFeedPosts(getAccessToken())
+        } else {
+            vkApiService.loadFeedPosts(getAccessToken(), startFrom)
+        }
+
+        nextFromFeedPost = response.feedPostContent.nextFrom
         val posts = feedPostMapper.mapResponseToFeedPosts(response)
         _feedPosts.addAll(posts)
-        return posts
+        return feedPosts
     }
 
     /**
@@ -57,6 +70,24 @@ class FeedPostRepository(application: Application) {
      */
     private fun getAccessToken(): String {
         return token?.accessToken ?: throw IllegalStateException("Access token is null")
+    }
+
+    suspend fun ignoreFeedPost(feedPost: FeedPost) {
+        vkApiService.ignoreFeedPost(
+            accessToken = getAccessToken(),
+            ownerId = feedPost.communityId,
+            postId = feedPost.id
+        )
+        _feedPosts.remove(feedPost)
+    }
+
+    suspend fun getComments(feedPost: FeedPost):List<Comment> {
+        val comments = vkApiService.getComments(
+            accessToken = getAccessToken(),
+            ownerId = feedPost.communityId,
+            postId = feedPost.id
+        )
+        return feedPostMapper.mapResponseToComments(comments)
     }
 
     /**
