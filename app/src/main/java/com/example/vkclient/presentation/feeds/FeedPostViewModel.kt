@@ -1,14 +1,21 @@
 package com.example.vkclient.presentation.feeds
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.vkclient.data.repository.FeedPostRepository
-import com.example.vkclient.domain.FeedPost
-import com.example.vkclient.domain.StatisticPostItem
-import kotlinx.coroutines.delay
+import com.example.vkclient.data.repository.FeedPostRepositoryImpl
+import com.example.vkclient.domain.entity.FeedPost
+import com.example.vkclient.domain.usecases.ChangeLikeStatusUseCase
+import com.example.vkclient.domain.usecases.GetRecommendationsUseCase
+import com.example.vkclient.domain.usecases.IgnoreFeedPostUseCase
+import com.example.vkclient.domain.usecases.LoadNextFeedPostUseCase
+import com.example.vkclient.extensions.mergeWith
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
 /**
@@ -18,37 +25,42 @@ import kotlinx.coroutines.launch
  */
 class FeedPostViewModel(application: Application) : AndroidViewModel(application) {
 
-    // Начаьный state для постов.
-    private val initialState = FeedPostScreenState.Initial
+    private val exceptionHandler = CoroutineExceptionHandler { _, ex ->
+        Log.d("Exception", "${ex.message}")
+    }
 
-    private val feedPostRepository = FeedPostRepository(application)
+    private val repository = FeedPostRepositoryImpl(application)
+
+    private val getRecommendationsUseCase = GetRecommendationsUseCase(repository)
+    private val loadNextFeedPostUseCase = LoadNextFeedPostUseCase(repository)
+    private val changeLikeStatusUseCase = ChangeLikeStatusUseCase(repository)
+    private val ignoreFeedPostUseCase = IgnoreFeedPostUseCase(repository)
+
+    private val feedPostsFlow = getRecommendationsUseCase()
+
+    private val loadNextDataFlow = MutableSharedFlow<FeedPostScreenState>()
 
     // State для поста
-    private val _screenState = MutableLiveData<FeedPostScreenState>(initialState)
-    val screenState: LiveData<FeedPostScreenState> = _screenState
-
-    init {
-        _screenState.value = FeedPostScreenState.Loading
-        loadFeedPosts()
-    }
-
-    private fun loadFeedPosts() {
-        viewModelScope.launch {
-            val feedPosts = feedPostRepository.loadFeedPosts()
-            _screenState.value = FeedPostScreenState.Posts(posts = feedPosts)
-        }
-    }
+    val screenState = feedPostsFlow
+        .filter { it.isNotEmpty() }
+        .map { FeedPostScreenState.Posts(posts = it) as FeedPostScreenState }
+        .onStart { emit(FeedPostScreenState.Loading) }
+        .mergeWith(loadNextDataFlow)
 
     /**
      * Загрузка следующих постов (подгрузка).
      *
      */
     fun loadNextFeedPosts() {
-        _screenState.value = FeedPostScreenState.Posts(
-            posts = feedPostRepository.feedPosts,
-            nextFeedPostsIsLoading = true
-        )
-        loadFeedPosts()
+        viewModelScope.launch {
+            loadNextDataFlow.emit(
+                FeedPostScreenState.Posts(
+                    posts = feedPostsFlow.value,
+                    nextFeedPostsIsLoading = true
+                )
+            )
+            loadNextFeedPostUseCase()
+        }
     }
 
     /**
@@ -57,48 +69,10 @@ class FeedPostViewModel(application: Application) : AndroidViewModel(application
      * @param feedPost - новостной пост
      */
     fun changeLikeStatus(feedPost: FeedPost) {
-        viewModelScope.launch {
-            feedPostRepository.changeLikeStatus(feedPost)
-            _screenState.value = FeedPostScreenState.Posts(posts = feedPostRepository.feedPosts)
+        viewModelScope.launch(exceptionHandler) {
+            changeLikeStatusUseCase(feedPost)
         }
     }
-
-//    /**
-//     * Изменение значений для элемента статистика поста.
-//     *
-//     * @param feedPost - пост
-//     * @param statisticPostItem - элемент статистики
-//     */
-//    fun updateCount(feedPost: FeedPost, statisticPostItem: StatisticPostItem) {
-//        val currentState = screenState.value
-//        if (currentState !is FeedPostScreenState.Posts) return
-//
-//        // Получаем коллекцию старых элементов статистики и заменяем на новые значения в screenStat'е.
-//        val oldNews = currentState.posts.toMutableList()
-//        val oldStatistics = feedPost.statistics
-//        val newStatistics = oldStatistics.toMutableList().apply {
-//            replaceAll { oldItem ->
-//                if (oldItem.type == statisticPostItem.type) {
-//                    oldItem.copy(count = oldItem.count + 1)
-//                } else {
-//                    oldItem
-//                }
-//            }
-//        }
-//
-//        // Копируем объект поста, но с новой статистикой и обновляем содержимое stat'а экрана постов.
-//        val newStatisticsCopy = feedPost.copy(statistics = newStatistics)
-//        val newPosts = oldNews.apply {
-//            replaceAll {
-//                if (it.id == newStatisticsCopy.id) {
-//                    newStatisticsCopy
-//                } else {
-//                    it
-//                }
-//            }
-//        }
-//        _screenState.value = FeedPostScreenState.Posts(posts = newPosts)
-//    }
 
     /**
      * Удаление поста.
@@ -107,9 +81,8 @@ class FeedPostViewModel(application: Application) : AndroidViewModel(application
      * @param feedPost - пост
      */
     fun remove(feedPost: FeedPost) {
-        viewModelScope.launch {
-            feedPostRepository.ignoreFeedPost(feedPost)
-            _screenState.value = FeedPostScreenState.Posts(posts = feedPostRepository.feedPosts)
+        viewModelScope.launch(exceptionHandler) {
+            ignoreFeedPostUseCase(feedPost)
         }
     }
 }

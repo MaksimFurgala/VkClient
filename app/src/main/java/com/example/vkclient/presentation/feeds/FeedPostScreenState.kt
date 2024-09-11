@@ -1,6 +1,6 @@
 package com.example.vkclient.presentation.feeds
 
-import com.example.vkclient.domain.FeedPost
+import com.example.vkclient.domain.entity.FeedPost
 
 sealed class FeedPostScreenState {
 

@@ -1,4 +1,4 @@
-package com.example.vkclient.presentation.main
+package com.example.vkclient.domain.entity
 
 /**
  * State авторизации.

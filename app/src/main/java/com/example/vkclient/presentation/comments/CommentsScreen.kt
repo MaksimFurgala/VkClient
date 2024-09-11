@@ -21,7 +21,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
@@ -29,8 +29,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import com.example.vkclient.domain.Comment
-import com.example.vkclient.domain.FeedPost
+import com.example.vkclient.domain.entity.Comment
+import com.example.vkclient.domain.entity.FeedPost
 
 /**
  * Экран со списком комментариев.
@@ -54,7 +54,7 @@ fun CommentsScreen(
     )
 
     // State для экрана комментариев.
-    val screenState = viewModel.screenState.observeAsState(CommentsScreenState.Initial)
+    val screenState = viewModel.screenState.collectAsState(CommentsScreenState.Initial)
     // Текущий state.
     val currentState = screenState.value
 

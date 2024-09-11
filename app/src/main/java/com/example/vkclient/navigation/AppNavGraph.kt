@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.vkclient.domain.FeedPost
+import com.example.vkclient.domain.entity.FeedPost
 
 /**
  * Основной граф навигации приложения.

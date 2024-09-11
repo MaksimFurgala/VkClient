@@ -3,7 +3,7 @@ package com.example.vkclient.presentation.comments
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.vkclient.domain.FeedPost
+import com.example.vkclient.domain.entity.FeedPost
 
 /**
  * Фабрика для создания viewmodel'и экрана комментариев.

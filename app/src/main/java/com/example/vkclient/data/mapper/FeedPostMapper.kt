@@ -3,10 +3,10 @@ package com.example.vkclient.data.mapper
 import com.example.vkclient.commons.DateConverters
 import com.example.vkclient.data.model.CommentsResponseDataModel
 import com.example.vkclient.data.model.FeedResponseDataModel
-import com.example.vkclient.domain.Comment
-import com.example.vkclient.domain.FeedPost
-import com.example.vkclient.domain.StatisticPostItem
-import com.example.vkclient.domain.StatisticType
+import com.example.vkclient.domain.entity.Comment
+import com.example.vkclient.domain.entity.FeedPost
+import com.example.vkclient.domain.entity.StatisticPostItem
+import com.example.vkclient.domain.entity.StatisticType
 import kotlin.math.absoluteValue
 
 /**

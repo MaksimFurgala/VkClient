@@ -1,6 +1,4 @@
-package com.example.vkclient.domain
-
-import com.example.vkclient.R
+package com.example.vkclient.domain.entity
 
 /**
  * Комментарий (общий data класс).

@@ -16,12 +16,12 @@ import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.vkclient.domain.FeedPost
+import com.example.vkclient.domain.entity.FeedPost
 import com.example.vkclient.ui.theme.darkBlue
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -32,7 +32,7 @@ fun FeedsScreen(
 ) {
     val viewModel: FeedPostViewModel = viewModel()
     // State для новостного поста.
-    val screenState = viewModel.screenState.observeAsState(FeedPostScreenState.Initial)
+    val screenState = viewModel.screenState.collectAsState(FeedPostScreenState.Initial)
 
     when (val currentState = screenState.value) {
         is FeedPostScreenState.Posts -> {

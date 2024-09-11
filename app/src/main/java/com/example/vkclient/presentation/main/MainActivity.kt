@@ -6,8 +6,9 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.vkclient.domain.entity.AuthState
 import com.example.vkclient.ui.theme.VkClientTheme
 import com.vk.api.sdk.VK
 import com.vk.api.sdk.auth.VKScope
@@ -32,11 +33,11 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun ScreenWithVkIdButton() {
         val mainViewModel: MainViewModel = viewModel()
-        val authState = mainViewModel.authState.observeAsState(AuthState.Initial)
+        val authState = mainViewModel.authState.collectAsState(AuthState.Initial)
 
         val launcher =
             rememberLauncherForActivityResult(contract = VK.getVKAuthActivityResultContract()) {
-                mainViewModel.performAuthResult(it)
+                mainViewModel.performAuthResult()
             }
 
         when (authState.value) {
