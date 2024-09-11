@@ -1,8 +1,8 @@
 package com.example.vkclient.data.network
 
-import com.example.vkclient.data.model.CommentsResponseDataModel
-import com.example.vkclient.data.model.FeedResponseDataModel
-import com.example.vkclient.data.model.LikesCountResponseDataModel
+import com.example.vkclient.data.model.feedpost.CommentsResponseDataModel
+import com.example.vkclient.data.model.feedpost.FeedResponseDataModel
+import com.example.vkclient.data.model.feedpost.LikesCountResponseDataModel
 import retrofit2.http.GET
 import retrofit2.http.Query
 

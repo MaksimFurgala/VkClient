@@ -1,8 +1,8 @@
 package com.example.vkclient.data.mapper
 
 import com.example.vkclient.commons.DateConverters
-import com.example.vkclient.data.model.CommentsResponseDataModel
-import com.example.vkclient.data.model.FeedResponseDataModel
+import com.example.vkclient.data.model.feedpost.CommentsResponseDataModel
+import com.example.vkclient.data.model.feedpost.FeedResponseDataModel
 import com.example.vkclient.domain.entity.Comment
 import com.example.vkclient.domain.entity.FeedPost
 import com.example.vkclient.domain.entity.StatisticPostItem
