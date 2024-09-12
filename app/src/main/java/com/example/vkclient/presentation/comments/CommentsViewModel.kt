@@ -1,10 +1,13 @@
 package com.example.vkclient.presentation.comments
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import com.example.vkclient.data.repository.FeedPostRepositoryImpl
+import android.content.Context
+import androidx.lifecycle.ViewModel
 import com.example.vkclient.domain.entity.FeedPost
-import com.example.vkclient.domain.usecases.GetCommentsUseCase
+import com.example.vkclient.domain.usecases.feedpost.GetCommentsUseCase
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.map
 
 /**
@@ -14,14 +17,12 @@ import kotlinx.coroutines.flow.map
  *
  * @param feedPost - новостной пост
  */
-class CommentsViewModel(
-    feedPost: FeedPost,
-    application: Application,
-) : AndroidViewModel(application) {
-
-    private val repository = FeedPostRepositoryImpl(application)
-
-    private val getCommentsUseCase = GetCommentsUseCase(repository)
+@HiltViewModel(assistedFactory = CommentsViewModelFactory::class)
+class CommentsViewModel @AssistedInject constructor(
+    @Assisted private val feedPost: FeedPost,
+    @ApplicationContext val context: Context,
+    private val getCommentsUseCase: GetCommentsUseCase,
+) : ViewModel() {
 
     val screenState = getCommentsUseCase(feedPost)
         .map {

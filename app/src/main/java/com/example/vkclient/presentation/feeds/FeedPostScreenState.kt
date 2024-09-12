@@ -10,7 +10,7 @@ sealed class FeedPostScreenState {
 
     data class Posts(
         val posts: List<FeedPost>,
-        val nextFeedPostsIsLoading: Boolean = false
+        val nextFeedPostsIsLoading: Boolean = false,
     ) :
         FeedPostScreenState()
 }

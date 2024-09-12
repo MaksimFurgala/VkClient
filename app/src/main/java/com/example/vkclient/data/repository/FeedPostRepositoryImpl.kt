@@ -1,35 +1,35 @@
 package com.example.vkclient.data.repository
 
-import android.app.Application
+import android.content.Context
 import android.util.Log
 import com.example.vkclient.data.mapper.FeedPostMapper
 import com.example.vkclient.data.network.VkApiFactory
+import com.example.vkclient.domain.entity.AuthState
 import com.example.vkclient.domain.entity.Comment
 import com.example.vkclient.domain.entity.FeedPost
 import com.example.vkclient.domain.entity.StatisticPostItem
 import com.example.vkclient.domain.entity.StatisticType
-import com.example.vkclient.extensions.mergeWith
-import com.example.vkclient.domain.entity.AuthState
 import com.example.vkclient.domain.repository.FeedPostRepository
+import com.example.vkclient.extensions.mergeWith
 import com.vk.api.sdk.VKPreferencesKeyValueStorage
 import com.vk.api.sdk.auth.VKAccessToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.flow.stateIn
+import javax.inject.Inject
 
-class FeedPostRepositoryImpl(application: Application): FeedPostRepository {
-
-    /**
-     * Хранилилище для VK SDK.
-     */
-    private val storage = VKPreferencesKeyValueStorage(application)
+class FeedPostRepositoryImpl @Inject constructor(
+    val context: Context,
+    private val storage: VKPreferencesKeyValueStorage,
+    private val feedPostMapper: FeedPostMapper,
+) :
+    FeedPostRepository {
 
     /**
      * Access-токен для доступа к сервисам VK.
@@ -71,11 +71,6 @@ class FeedPostRepositoryImpl(application: Application): FeedPostRepository {
      * Vk api service
      */
     private val vkApiService = VkApiFactory.vkApiService
-
-    /**
-     * Feed post mapper
-     */
-    private val feedPostMapper = FeedPostMapper()
 
     /**
      * Тек. список новостных постов.

@@ -11,5 +11,5 @@ import com.google.gson.annotations.SerializedName
 data class PhotoDataModel(
 
     @SerializedName("sizes")
-    val photoCollection: List<PhotoInfoDataModel>
+    val photoCollection: List<PhotoInfoDataModel>,
 )

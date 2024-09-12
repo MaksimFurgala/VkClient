@@ -12,7 +12,7 @@ import com.example.vkclient.navigation.Screen
 sealed class NavigationItem(
     val screen: Screen,
     val titleResId: Int,
-    val icon: ImageVector
+    val icon: ImageVector,
 ) {
     object Home :
         NavigationItem(

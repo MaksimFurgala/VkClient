@@ -1,21 +1,15 @@
 package com.example.vkclient.presentation.comments
 
-import android.app.Application
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.example.vkclient.domain.entity.FeedPost
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
 
 /**
  * Фабрика для создания viewmodel'и экрана комментариев.
  *
- * @property feedPost - новостной пост
  * @constructor Create empty Comments view model factory
  */
-class CommentsViewModelFactory(
-    private val feedPost: FeedPost,
-    private val application: Application
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return CommentsViewModel(feedPost, application) as T
-    }
+@AssistedFactory
+interface CommentsViewModelFactory {
+    fun create(@Assisted feedPost: FeedPost): CommentsViewModel
 }

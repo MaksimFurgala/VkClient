@@ -10,5 +10,5 @@ import com.google.gson.annotations.SerializedName
  */
 data class LikesCountResponseDataModel(
 
-    @SerializedName("response") val likes: LikesCountDataModel
+    @SerializedName("response") val likes: LikesCountDataModel,
 )

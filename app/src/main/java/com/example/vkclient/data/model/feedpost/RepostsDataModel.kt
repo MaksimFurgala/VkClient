@@ -11,5 +11,5 @@ import com.google.gson.annotations.SerializedName
 data class RepostsDataModel(
 
     @SerializedName("count")
-    val count: Int = 0
+    val count: Int = 0,
 )

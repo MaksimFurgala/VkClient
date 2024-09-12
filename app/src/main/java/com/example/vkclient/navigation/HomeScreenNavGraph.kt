@@ -16,7 +16,7 @@ import com.example.vkclient.domain.entity.FeedPost
  */
 fun NavGraphBuilder.homeScreenNavGraph(
     feedScreenContent: @Composable () -> Unit,
-    commentsScreenContent: @Composable (FeedPost) -> Unit
+    commentsScreenContent: @Composable (FeedPost) -> Unit,
 ) {
     navigation(
         startDestination = Screen.FeedPosts.route,

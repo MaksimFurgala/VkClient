@@ -7,12 +7,14 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.vkclient.domain.entity.AuthState
 import com.example.vkclient.ui.theme.VkClientTheme
 import com.vk.api.sdk.VK
 import com.vk.api.sdk.auth.VKScope
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +34,7 @@ class MainActivity : ComponentActivity() {
      */
     @Composable
     fun ScreenWithVkIdButton() {
-        val mainViewModel: MainViewModel = viewModel()
+        val mainViewModel: MainViewModel = hiltViewModel()
         val authState = mainViewModel.authState.collectAsState(AuthState.Initial)
 
         val launcher =

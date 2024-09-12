@@ -11,12 +11,12 @@ import com.google.gson.Gson
  * @constructor Create empty Screen
  */
 sealed class Screen(val route: String) {
-    object FeedPosts: Screen(ROUTE_FEED_POSTS)
-    object Favourite: Screen(ROUTE_FAVOURITE)
-    object Profile: Screen(ROUTE_PROFILE)
-    object Messenger: Screen(ROUTE_MESSENGER)
-    object Home: Screen(ROUTE_HOME)
-    object Comments: Screen(ROUTE_COMMENTS) {
+    object FeedPosts : Screen(ROUTE_FEED_POSTS)
+    object Favourite : Screen(ROUTE_FAVOURITE)
+    object Profile : Screen(ROUTE_PROFILE)
+    object Messenger : Screen(ROUTE_MESSENGER)
+    object Home : Screen(ROUTE_HOME)
+    object Comments : Screen(ROUTE_COMMENTS) {
         private const val ROUTE_FOR_ARGS = "comments"
 
         /**

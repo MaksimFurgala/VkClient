@@ -14,7 +14,7 @@ import com.example.vkclient.domain.entity.FeedPost
  * @constructor Create empty Navigation state
  */
 class NavigationState(
-    val navHostController: NavHostController
+    val navHostController: NavHostController,
 ) {
 
     /**
@@ -50,7 +50,7 @@ class NavigationState(
  */
 @Composable
 fun rememberNavigationState(
-    navHostController: NavHostController = rememberNavController()
+    navHostController: NavHostController = rememberNavController(),
 ): NavigationState {
     return remember {
         NavigationState(navHostController)

@@ -20,7 +20,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.vkclient.domain.entity.FeedPost
 import com.example.vkclient.ui.theme.darkBlue
 
@@ -30,7 +30,7 @@ fun FeedsScreen(
     paddingValues: PaddingValues,
     onCommentClickListener: (FeedPost) -> Unit,
 ) {
-    val viewModel: FeedPostViewModel = viewModel()
+    val viewModel: FeedPostViewModel = hiltViewModel()
     // State для новостного поста.
     val screenState = viewModel.screenState.collectAsState(FeedPostScreenState.Initial)
 
@@ -68,7 +68,7 @@ private fun FeedPosts(
     paddingValues: PaddingValues,
     posts: List<FeedPost>,
     onCommentClickListener: (FeedPost) -> Unit,
-    nextFeedPostsIsLoading: Boolean
+    nextFeedPostsIsLoading: Boolean,
 ) {
     LazyColumn(
         Modifier.padding(paddingValues),

@@ -18,5 +18,5 @@ data class FeedPostContentDataModel(
     val groups: List<GroupDataModel>,
 
     @SerializedName("next_from")
-    val nextFrom: String?
+    val nextFrom: String?,
 )

@@ -3,5 +3,7 @@ plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.jetbrains.kotlin.android) apply false
     alias(libs.plugins.kotlin.parcelize) apply false
-    id("vkid.manifest.placeholders") version "1.0.0" apply true
+    alias(libs.plugins.vkid.manifest.placeholders) apply false
+    alias(libs.plugins.kotlin.kapt) apply false
+    alias(libs.plugins.dagger.hilt) apply false
 }

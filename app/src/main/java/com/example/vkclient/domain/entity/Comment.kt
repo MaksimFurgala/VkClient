@@ -5,7 +5,7 @@ package com.example.vkclient.domain.entity
  *
  * @property id - id
  * @property authorName - автор
- * @property authorAvatarId - id аватарки.TODO:заменить на URL при подключении VK Api
+ * @property authorAvatarUrl - url аватарки
  * @property content - текст комментария
  * @property publicDate - дата публикации
  * @constructor Create empty Comment
@@ -15,5 +15,5 @@ data class Comment(
     val authorName: String,
     val authorAvatarUrl: String,
     val content: String,
-    val publicDate: String
+    val publicDate: String,
 )

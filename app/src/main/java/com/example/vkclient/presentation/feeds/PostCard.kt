@@ -101,7 +101,7 @@ private fun BottomBarPostCard(
     statistics: List<StatisticPostItem>,
     onLikeClickListener: (StatisticPostItem) -> Unit,
     onCommentClickListener: (StatisticPostItem) -> Unit,
-    isFavourite: Boolean
+    isFavourite: Boolean,
 ) {
     Row {
         Row(
@@ -166,7 +166,7 @@ private fun IconWithText(
     iconResId: Int,
     text: String,
     onItemClickListener: (() -> Unit)? = null,
-    tint: Color = MaterialTheme.colorScheme.onSecondary
+    tint: Color = MaterialTheme.colorScheme.onSecondary,
 ) {
     val modifier = if (onItemClickListener == null) {
         Modifier

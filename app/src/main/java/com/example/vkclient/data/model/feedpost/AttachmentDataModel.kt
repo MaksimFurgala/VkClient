@@ -11,5 +11,5 @@ import com.google.gson.annotations.SerializedName
 data class AttachmentDataModel(
 
     @SerializedName("photo")
-    val photo: PhotoDataModel
+    val photo: PhotoDataModel,
 )

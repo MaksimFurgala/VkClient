@@ -7,6 +7,7 @@ import com.example.vkclient.domain.entity.Comment
 import com.example.vkclient.domain.entity.FeedPost
 import com.example.vkclient.domain.entity.StatisticPostItem
 import com.example.vkclient.domain.entity.StatisticType
+import javax.inject.Inject
 import kotlin.math.absoluteValue
 
 /**
@@ -14,7 +15,7 @@ import kotlin.math.absoluteValue
  *
  * @constructor Create empty Feed post mapper
  */
-class FeedPostMapper {
+class FeedPostMapper @Inject constructor() {
 
     /**
      * Мапер FeedResponseDataModel в список новостных постов.

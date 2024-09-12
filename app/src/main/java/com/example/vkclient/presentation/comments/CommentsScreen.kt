@@ -1,6 +1,5 @@
 package com.example.vkclient.presentation.comments
 
-import android.app.Application
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -12,7 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -24,10 +23,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.vkclient.domain.entity.Comment
 import com.example.vkclient.domain.entity.FeedPost
@@ -46,15 +44,13 @@ fun CommentsScreen(
     onBackPressed: () -> Unit,
 ) {
     // ViewModel для комментариев.
-    val viewModel: CommentsViewModel = viewModel(
-        factory = CommentsViewModelFactory(
-            feedPost,
-            LocalContext.current.applicationContext as Application
-        )
+    val viewModel = hiltViewModel<CommentsViewModel, CommentsViewModelFactory>(
+        creationCallback = { it.create(feedPost) }
     )
 
     // State для экрана комментариев.
     val screenState = viewModel.screenState.collectAsState(CommentsScreenState.Initial)
+
     // Текущий state.
     val currentState = screenState.value
 
@@ -63,7 +59,10 @@ fun CommentsScreen(
             TopAppBar(title = { Text(text = "Комментарии") },
                 navigationIcon = {
                     IconButton(onClick = { onBackPressed() }) {
-                        Icon(imageVector = Icons.Rounded.ArrowBack, contentDescription = null)
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
+                            contentDescription = null
+                        )
                     }
                 })
         }) { paddingValues ->

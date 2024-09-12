@@ -6,7 +6,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class StatisticPostItem(
     val type: StatisticType,
-    val count: Int = 0
+    val count: Int = 0,
 ) : Parcelable
 
 enum class StatisticType {
