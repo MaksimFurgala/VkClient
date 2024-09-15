@@ -20,6 +20,7 @@ import com.example.vkclient.navigation.AppNavGraph
 import com.example.vkclient.navigation.rememberNavigationState
 import com.example.vkclient.presentation.comments.CommentsScreen
 import com.example.vkclient.presentation.feeds.FeedsScreen
+import com.example.vkclient.presentation.messenger.MessengerScreen
 
 /**
  * Главный экран приложения.
@@ -92,7 +93,11 @@ fun MainScreen() {
             },
             // TODO: доработать экраны.
             favouriteScreenContent = { Text(text = "FavouriteItem", color = Color.Black) },
-            messengerScreenContent = { Text(text = "MessageItem", color = Color.Black) },
+            messengerScreenContent = {
+                MessengerScreen(onBackPressed = {
+                    navigationState.navHostController.popBackStack()
+                })
+            },
             profileScreenContent = { Text(text = "ProfileItem", color = Color.Black) })
         //endregion
     }

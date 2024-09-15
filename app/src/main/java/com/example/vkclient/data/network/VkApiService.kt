@@ -3,6 +3,7 @@ package com.example.vkclient.data.network
 import com.example.vkclient.data.model.feedpost.CommentsResponseDataModel
 import com.example.vkclient.data.model.feedpost.FeedResponseDataModel
 import com.example.vkclient.data.model.feedpost.LikesCountResponseDataModel
+import com.example.vkclient.data.model.profile.ProfileResponseDataModel
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -12,6 +13,9 @@ import retrofit2.http.Query
  * @constructor Create empty Vk api service
  */
 interface VkApiService {
+
+    @GET("users.get?v=5.199&field=bdate")
+    suspend fun getUserProfile(@Query("access_token") accessToken: String): ProfileResponseDataModel
 
     /**
      * Загрузка новостных постов.
@@ -50,7 +54,7 @@ interface VkApiService {
      * @param postId - id поста
      * @return - лайки
      */
-    @GET("likes.add?v=5.199&type=wall")
+    @GET("likes.add?v=5.199&type=post")
     suspend fun addLike(
         @Query("access_token") accessToken: String,
         @Query("owner_id") ownerId: Long,

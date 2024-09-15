@@ -6,4 +6,6 @@
     <string name="navigation_item_profile">Профиль</string>
     <string name="navigation_item_messages">Сообщения</string>
     <string name="button_login">Войти</string>
+    <string name="chats_top_app_bar_titile">Чаты</string>
+    <string name="messenger_message_content">В данный момент раздел находится на стадии разработки. У тех. поддержки необходимо запросить доступ к Rest API для получения доступа к личным сообщениям пользователя.</string>
 </resources>
