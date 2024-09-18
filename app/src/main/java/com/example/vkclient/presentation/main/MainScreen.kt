@@ -21,6 +21,7 @@ import com.example.vkclient.navigation.rememberNavigationState
 import com.example.vkclient.presentation.comments.CommentsScreen
 import com.example.vkclient.presentation.feeds.FeedsScreen
 import com.example.vkclient.presentation.messenger.MessengerScreen
+import com.example.vkclient.presentation.profile.ProfileScreen
 
 /**
  * Главный экран приложения.
@@ -42,8 +43,8 @@ fun MainScreen() {
                 // Элементы навигации.
                 val itemsNavigation = listOf(
                     NavigationItem.Home,
-                    NavigationItem.Favourite,
-                    NavigationItem.Message,
+                    NavigationItem.Widgets,
+                    NavigationItem.Messenger,
                     NavigationItem.Profile
                 )
 
@@ -98,7 +99,11 @@ fun MainScreen() {
                     navigationState.navHostController.popBackStack()
                 })
             },
-            profileScreenContent = { Text(text = "ProfileItem", color = Color.Black) })
+            profileScreenContent = {
+                ProfileScreen(onBackPressed = {
+                    navigationState.navHostController.popBackStack()
+                })
+            })
         //endregion
     }
 }

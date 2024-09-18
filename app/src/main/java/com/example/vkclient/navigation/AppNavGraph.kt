@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.vkclient.domain.entity.FeedPost
+import com.example.vkclient.domain.entity.Profile
 
 /**
  * Основной граф навигации приложения.
@@ -34,7 +35,7 @@ fun AppNavGraph(
         )
 
         // Избранное
-        composable(Screen.Favourite.route) {
+        composable(Screen.Widgets.route) {
             favouriteScreenContent()
         }
 

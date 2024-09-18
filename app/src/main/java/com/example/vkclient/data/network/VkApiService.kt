@@ -3,6 +3,7 @@ package com.example.vkclient.data.network
 import com.example.vkclient.data.model.feedpost.CommentsResponseDataModel
 import com.example.vkclient.data.model.feedpost.FeedResponseDataModel
 import com.example.vkclient.data.model.feedpost.LikesCountResponseDataModel
+import com.example.vkclient.data.model.profile.ProfileDataModel
 import com.example.vkclient.data.model.profile.ProfileResponseDataModel
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -14,7 +15,7 @@ import retrofit2.http.Query
  */
 interface VkApiService {
 
-    @GET("users.get?v=5.199&field=bdate")
+    @GET("users.get?v=5.199&fields=photo_400_orig,bdate")
     suspend fun getUserProfile(@Query("access_token") accessToken: String): ProfileResponseDataModel
 
     /**
@@ -29,7 +30,7 @@ interface VkApiService {
     @GET("newsfeed.getRecommended?v=5.199")
     suspend fun loadFeedPosts(
         @Query("access_token") accessToken: String,
-        @Query("start_from") startFrom: String
+        @Query("start_from") startFrom: String,
     ): FeedResponseDataModel
 
     @GET("newsfeed.ignoreItem?v=5.199&type=post")
@@ -43,7 +44,7 @@ interface VkApiService {
     suspend fun getComments(
         @Query("access_token") accessToken: String,
         @Query("owner_id") ownerId: Long,
-        @Query("post_id") postId: Long
+        @Query("post_id") postId: Long,
     ): CommentsResponseDataModel
 
     /**

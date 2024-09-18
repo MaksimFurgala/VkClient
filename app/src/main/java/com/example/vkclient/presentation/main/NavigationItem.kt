@@ -2,12 +2,12 @@ package com.example.vkclient.presentation.main
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Email
-import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.vkclient.R
 import com.example.vkclient.navigation.Screen
+import com.example.vkclient.ui.theme.icons.WidgetsIcon
 
 sealed class NavigationItem(
     val screen: Screen,
@@ -21,13 +21,13 @@ sealed class NavigationItem(
             icon = Icons.Outlined.Home
         )
 
-    object Favourite : NavigationItem(
-        screen = Screen.Favourite,
-        titleResId = R.string.navigation_item_favourite,
-        icon = Icons.Outlined.Favorite
+    object Widgets : NavigationItem(
+        screen = Screen.Widgets,
+        titleResId = R.string.navigation_item_widgets,
+        icon = WidgetsIcon
     )
 
-    object Message : NavigationItem(
+    object Messenger : NavigationItem(
         screen = Screen.Messenger,
         titleResId = R.string.navigation_item_messages,
         icon = Icons.Outlined.Email

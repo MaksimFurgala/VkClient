@@ -12,7 +12,7 @@ import com.google.gson.Gson
  */
 sealed class Screen(val route: String) {
     object FeedPosts : Screen(ROUTE_FEED_POSTS)
-    object Favourite : Screen(ROUTE_FAVOURITE)
+    object Widgets : Screen(ROUTE_WIDGETS)
     object Profile : Screen(ROUTE_PROFILE)
     object Messenger : Screen(ROUTE_MESSENGER)
     object Home : Screen(ROUTE_HOME)
@@ -36,7 +36,7 @@ sealed class Screen(val route: String) {
         const val ROUTE_HOME = "home"
         const val ROUTE_COMMENTS = "comments/{$KEY_FEED_POST}"
         const val ROUTE_FEED_POSTS = "feed_posts"
-        const val ROUTE_FAVOURITE = "favourite"
+        const val ROUTE_WIDGETS = "widgets"
         const val ROUTE_PROFILE = "profile"
         const val ROUTE_MESSENGER = "messenger"
     }

@@ -4,5 +4,5 @@ import com.google.gson.annotations.SerializedName
 
 data class ProfileResponseDataModel(
     @SerializedName("response")
-    val profile: ProfileDataModel,
+    val profile: List<ProfileDataModel>,
 )

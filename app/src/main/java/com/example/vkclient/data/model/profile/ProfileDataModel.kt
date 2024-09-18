@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 data class ProfileDataModel(
 
     @SerializedName("id")
-    val id: Float,
+    val id: Long,
 
     @SerializedName("first_name")
     val firstName: String,
@@ -15,4 +15,7 @@ data class ProfileDataModel(
 
     @SerializedName("bdate")
     val birthday: String,
+
+    @SerializedName("photo_400_orig")
+    val avatarUrl: String
 )

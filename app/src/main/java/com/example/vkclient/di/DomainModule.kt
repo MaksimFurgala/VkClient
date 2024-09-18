@@ -1,6 +1,7 @@
 package com.example.vkclient.di
 
 import com.example.vkclient.domain.repository.FeedPostRepository
+import com.example.vkclient.domain.repository.ProfileRepository
 import com.example.vkclient.domain.usecases.auth.CheckAuthStateUseCase
 import com.example.vkclient.domain.usecases.auth.GetAuthStateUseCase
 import com.example.vkclient.domain.usecases.feedpost.ChangeLikeStatusUseCase
@@ -8,6 +9,7 @@ import com.example.vkclient.domain.usecases.feedpost.GetCommentsUseCase
 import com.example.vkclient.domain.usecases.feedpost.GetRecommendationsUseCase
 import com.example.vkclient.domain.usecases.feedpost.IgnoreFeedPostUseCase
 import com.example.vkclient.domain.usecases.feedpost.LoadNextFeedPostUseCase
+import com.example.vkclient.domain.usecases.profile.GetUserProfileUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -58,5 +60,11 @@ class DomainModule {
     @Singleton
     fun provideLoadNextFeedPostUseCase(repository: FeedPostRepository): LoadNextFeedPostUseCase {
         return LoadNextFeedPostUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetUserProfileUseCase(repository: ProfileRepository): GetUserProfileUseCase {
+        return GetUserProfileUseCase(repository)
     }
 }

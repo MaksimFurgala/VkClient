@@ -2,7 +2,7 @@
     <string name="app_name">VkClient</string>
     <string name="post_text_content_test">Lorem ipsum odor amet, consectetuer adipiscing elit. Cubilia cubilia consequat porta viverra non tristique accumsan facilisi.</string>
     <string name="navigation_item_home">Главная</string>
-    <string name="navigation_item_favourite">Избранное</string>
+    <string name="navigation_item_widgets">Виджеты</string>
     <string name="navigation_item_profile">Профиль</string>
     <string name="navigation_item_messages">Сообщения</string>
     <string name="button_login">Войти</string>
